@@ -1,0 +1,186 @@
+
+{
+  "projectName":"febe",
+    "tables": [
+      {
+        "content": {
+            "fields": [
+                {
+                  "name": "ID",
+                  "type": "String"
+                },
+                {
+                    "name": "contentName",
+                    "type": "String"
+                  },
+                {
+                    "name": "contentDesc",
+                    "type": "String"
+                  },
+                  {
+                    "name": "contentType",
+                    "type": "String"
+                  }
+              ],
+              "relations": [
+                {
+                  "table": [
+                    {
+                      "name": "review"
+                     
+                    },
+                    {
+                        "name": "like"
+                      }
+                  ]
+                }
+              ]
+        },
+        "review": {
+            "fields": [
+                {
+                  "name": "ID",
+                  "type": "String"
+                },
+                {
+                    "name": "reviewComments",
+                    "type": "String"
+                  },
+                {
+                    "name": "reviewRatting",
+                    "type": "String"
+                  },
+                  {
+                    "name": "reviewUserId",
+                    "type": "String"
+                  },
+                  {
+                    "name": "reviewContentId",
+                    "type": "String"
+                  }
+                  
+              ],
+              "relations": [
+                {
+                  "table": [
+                    {
+                      "name": "like"
+                    }
+                  ]
+                }
+              ]
+        },
+        "like": {
+            "fields": [
+                {
+                  "name": "ID",
+                  "type": "String"
+                },
+                {
+                    "name": "likeId",
+                    "type": "String"
+                  },
+                {
+                    "name": "reviewId",
+                    "type": "String"
+                  },
+                  {
+                    "name": "contentId",
+                    "type": "String"
+                  },
+                  {
+                    "name": "userId",
+                    "type": "String"
+                  },
+                  {
+                    "name": "like",
+                    "type": "String"
+                  }
+              ],
+              "relations": [
+                {
+                  "table": [
+                    {
+                      "name": "content"
+          
+                    }
+                  ]
+                }
+              ]
+        },
+        "users": {
+          "fields": [
+              {
+                "name": "ID",
+                "type": "String"
+              },
+              {
+                  "name": "email",
+                  "type": "String"
+                },
+              {
+                  "name": "firstName",
+                  "type": "String"
+                },
+                {
+                  "name": "lastName",
+                  "type": "String"
+                }
+            ],
+            "relations": [
+              {
+                "table": [
+                  {
+                    "name": "content"
+                  },
+                  {
+                    "name": "like"
+                  },
+                  {
+                    "name": "review"
+                  }
+                ]
+              }
+            ]
+      },"helpFull": {
+        "fields": [
+            {
+              "name": "ID",
+              "type": "String"
+            },
+            {
+                "name": "email",
+                "type": "String"
+              },
+            {
+                "name": "firstName",
+                "type": "String"
+              },
+              {
+                "name": "lastName",
+                "type": "String"
+              }
+          ],
+          "relations": [
+            {
+              "table": [
+                {
+                  "name": "content"
+                },
+                {
+                  "name": "users"
+                },
+                {
+                  "name": "like"
+                },
+                {
+                  "name": "review"
+                }
+              ]
+            }
+          ]
+    }
+      }
+    ]
+  }
+  
