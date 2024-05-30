@@ -18,7 +18,7 @@ RUN curl -L https://www.chef.io/chef/install.sh | bash
 RUN mkdir -p /var/chef/cookbooks /var/chef/config
 
 # Copy cookbooks to the image
-COPY cookbooks /var/chef/cookbooks
+COPY graphql /var/chef/cookbooks
 
 # Copy configuration files to the image
 COPY solo.rb /var/chef/config/solo.rb
