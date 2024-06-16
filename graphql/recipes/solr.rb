@@ -5,16 +5,16 @@
 # Copyright:: 2024, The Authors, All Rights Reserved.
 
 
-installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
-# installDirectory = "/var/chef/output/"
+#installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
+ installDirectory = "/var/chef/output/"
 
 rootDirectory="solrtest"
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
 
-json_string = File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json')
-# json_string = File.read('/var/chef/cookbooks/graphql/file.json')
+#json_string = File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json')
+json_string = File.read('/var/chef/cookbooks/graphql/file.json')
 
 
 # Parse the JSON string into a Ruby hash

@@ -16,13 +16,15 @@ RUN curl -L https://www.chef.io/chef/install.sh | bash
 
 # Create directories for cookbooks and configurations
 RUN mkdir -p /var/chef/cookbooks /var/chef/config
+RUN mkdir -p /var/chef/output
 
 # Copy cookbooks to the image
-COPY graphql /var/chef/cookbooks
+COPY graphql /var/chef/cookbooks/graphql
 
 # Copy configuration files to the image
+COPY file.json /var/chef/cookbooks/graphql/file.json
 COPY solo.rb /var/chef/config/solo.rb
-COPY web.json /var/chef/config/node.json
+COPY web.json /var/chef/config/web.json
 
 # Run Chef-Solo to apply the cookbook
 CMD ["chef-solo", "-c", "/var/chef/config/solo.rb", "-j", "/var/chef/config/node.json"]

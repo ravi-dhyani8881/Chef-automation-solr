@@ -5,8 +5,9 @@
 # Copyright:: 2024, The Authors, All Rights Reserved.
 
 # Read the contents of the JSON file as a string
-json_string = File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json')
-#json_string = File.read('/var/chef/cookbooks/graphql/file.json')
+#json_string = File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json')
+json_string = File.read('/var/chef/cookbooks/graphql/file.json')
+
 # Parse the JSON string into a Ruby hash
 json_data = JSON.parse(json_string)
 
@@ -15,12 +16,21 @@ graph = json_data["tables"]
 
 projectName = json_data["projectName"]
 
-installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
+installDirectory = "/var/chef/output/"
 
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
 
+user 'ravi.dhyani' do
+  comment 'User for owning the directory'
+  uid '1001' # Optional, specify the user ID if necessary
+  gid 'users' # Optional, specify the group ID or group name if necessary
+  home '/home/ravi.dhyani'
+  shell '/bin/bash'
+  manage_home true # Creates the home directory if it doesn't exist
+  action :create
+end
 
 directory installDirectory + projectName do
   owner 'ravi.dhyani'
