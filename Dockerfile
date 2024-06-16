@@ -27,4 +27,14 @@ COPY solo.rb /var/chef/config/solo.rb
 COPY web.json /var/chef/config/web.json
 
 # Run Chef-Solo to apply the cookbook
-CMD ["chef-solo", "-c", "/var/chef/config/solo.rb", "-j", "/var/chef/config/node.json"]
+CMD ["chef-solo", "-c", "/var/chef/config/solo.rb", "-j", "/var/chef/config/web.json"]
+
+# Define environment variables for the repository
+ENV REPO_URL=https://github.com/ravi-dhyani8881/solr-docker.git
+ENV REPO_DIR=/var/chef/output/gitRepo
+ENV BRANCH_NAME=chef-solo
+
+# Clone the repository and checkout the desired branch/commit
+RUN git clone $REPO_URL $REPO_DIR \
+    && cd $REPO_DIR \
+    && git checkout $BRANCH_NAME
