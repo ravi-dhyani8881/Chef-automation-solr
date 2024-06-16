@@ -6,7 +6,7 @@
 
 # Read the contents of the JSON file as a string
 json_string = File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json')
-
+#json_string = File.read('/var/chef/cookbooks/graphql/file.json')
 # Parse the JSON string into a Ruby hash
 json_data = JSON.parse(json_string)
 

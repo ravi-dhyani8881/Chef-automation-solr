@@ -1,9 +1,9 @@
 # Use an official Ubuntu as a parent image
-FROM ubuntu:14.04
+FROM ubuntu:22.04
 
 # Set environment variables to avoid user interaction during package installation
 ENV DEBIAN_FRONTEND=noninteractive
-
+ENV CHEF_LICENSE=accept-silent
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y \
