@@ -8,6 +8,7 @@ ENV CHEF_LICENSE=accept-silent
 RUN apt-get update && \
     apt-get install -y \
     curl \
+    nano \
     git \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,15 +27,30 @@ COPY file.json /var/chef/cookbooks/graphql/file.json
 COPY solo.rb /var/chef/config/solo.rb
 COPY web.json /var/chef/config/web.json
 
-# Run Chef-Solo to apply the cookbook
-CMD ["chef-solo", "-c", "/var/chef/config/solo.rb", "-j", "/var/chef/config/web.json"]
 
 # Define environment variables for the repository
 ENV REPO_URL=https://github.com/ravi-dhyani8881/solr-docker.git
 ENV REPO_DIR=/var/chef/output/gitRepo
-ENV BRANCH_NAME=chef-solo
+ENV BRANCH_NAME=master
+
 
 # Clone the repository and checkout the desired branch/commit
 RUN git clone $REPO_URL $REPO_DIR \
     && cd $REPO_DIR \
-    && git checkout $BRANCH_NAME
+    && git checkout $BRANCH_NAME 
+
+# Set the directory as a safe directory
+RUN git config --global --add safe.directory $REPO_DIR
+
+# Set the working directory
+WORKDIR /var/chef
+
+# Add an entrypoint script to run chef-solo
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Set the entry point
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Default command
+#CMD ["chef-solo", "-c", "/var/chef/config/solo.rb", "-j", "/var/chef/config/web.json"]
