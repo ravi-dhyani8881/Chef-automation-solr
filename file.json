@@ -5,7 +5,7 @@
       "ravi": {
         "fields": [
           {
-            "name": "ravi-field",
+            "name": "ravi-field-post-fix",
             "type": "INTEGER"
           },
           {
