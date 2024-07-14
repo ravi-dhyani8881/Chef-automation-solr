@@ -19,6 +19,9 @@ jobs:
       
     - name: Log event payload
       run: echo '${{ toJson(github.event.client_payload) }}'
+
+    - name: Save event payload to file
+      run: echo '${{ toJson(github.event.client_payload) }}' > file.json
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -31,7 +34,9 @@ jobs:
 
     - name: Build and tag Docker image
       run: |
-        docker build -t my-chef-solo-image .
+        docker run --rm -v ${{ github.workspace }}/file.json:/var/chef/cookbooks/graphql/file.json \
+        -e GITHUB_TOKEN=${{ secrets.OTHER_REPO_GITHUB_TOKEN }} \
+        my-chef-solo-image
         docker tag my-chef-solo-image:latest ${{ secrets.DOCKER_USERNAME }}/my-chef-solo-image:latest
 
     - name: Push Docker image to Docker Hub
