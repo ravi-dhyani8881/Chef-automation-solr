@@ -18,6 +18,11 @@ projectName = json_data["projectName"]
 
 installDirectory = "/var/chef/output/"
 
+# Check if projectName is nil
+if projectName.nil?
+  raise "Error: 'projectName' is not set in the JSON file."
+end
+
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
