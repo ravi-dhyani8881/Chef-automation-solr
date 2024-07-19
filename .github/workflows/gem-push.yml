@@ -33,8 +33,11 @@ jobs:
           exit 1
         fi
 
-    - name: Print the contents of file.json
-      run: cat file.json
+    - name: Print the location and contents of file.json
+      run: |
+        echo "Location of file.json: $(pwd)/file.json"
+        echo "Contents of file.json:"
+        cat file.json
 
 
     - name: Set up Docker Buildx
