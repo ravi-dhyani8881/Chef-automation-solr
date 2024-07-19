@@ -38,7 +38,7 @@ jobs:
         echo "Location of file.json: $(pwd)/file.json"
         echo "Contents of file.json:"
         cat file.json
-
+        cat ${{ github.workspace }}/file.json
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
