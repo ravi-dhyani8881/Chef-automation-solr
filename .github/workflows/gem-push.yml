@@ -24,6 +24,19 @@ jobs:
     - name: Save event payload to file
       run: echo '${{ toJson(github.event.client_payload) }}' > file.json
 
+    - name: Check if file.json exists and has content
+      run: |
+        if [ -s file.json ]; then
+          echo "file.json exists and has content."
+        else
+          echo "file.json does not exist or is empty."
+          exit 1
+        fi
+
+    - name: Print the contents of file.json
+      run: cat file.json
+
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
