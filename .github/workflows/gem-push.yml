@@ -40,6 +40,13 @@ jobs:
         cat file.json
         cat ${{ github.workspace }}/file.json
 
+    - name: Extract projectName and write to file.json
+      run: |
+        projectName=$(jq -r '.client_payload.data' file.json)
+        echo "Extracted projectName: $projectName"
+        jq --arg projectName "$projectName" '.projectName = $projectName' file.json > tmp.json && mv tmp.json file.json
+
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
