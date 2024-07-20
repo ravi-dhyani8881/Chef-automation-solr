@@ -42,9 +42,9 @@ jobs:
 
     - name: Extract projectName and write to file.json
       run: |
-        projectName=$(jq -r '.client_payload.data' file.json)
+        projectName=$(jq -r '.client_payload.data.projectName' file.json)
         echo "Extracted projectName: $projectName"
-        jq --arg projectName "$projectName" '.projectName = $projectName' file.json > tmp.json && mv tmp.json file.json
+        echo "{\"projectName\": \"$projectName\"}" > file.json
 
     - name: Verify content of file.json
       run: |
