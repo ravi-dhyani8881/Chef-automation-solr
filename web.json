@@ -1,6 +1,6 @@
 
 {
-/*  "run_list": ["recipe[graphql::solr]"] */
- "run_list": ["recipe[graphql::default]", "recipe[graphql::solr]"]
+ "run_list": ["recipe[graphql::solr]"] 
+/*  "run_list": ["recipe[graphql::default]", "recipe[graphql::solr]"] */
 
 }
