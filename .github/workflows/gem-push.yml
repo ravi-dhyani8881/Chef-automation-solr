@@ -44,7 +44,7 @@ jobs:
       run: |
         projectName=$(jq -r '.client_payload.data' file.json)
         echo "Extracted projectName: $projectName"
-        echo "{\"projectName\": \"$projectName\"}" > file.json
+        echo "$projectName" > file.json
 
     - name: Verify content of file.json
       run: |
