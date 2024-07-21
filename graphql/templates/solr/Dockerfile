@@ -126,6 +126,10 @@ COPY --chown=0:0 reply /var/solr/data/reply
 COPY --chown=0:0 ReplyLikeHelpfulAnalytic /var/solr/data/ReplyLikeHelpfulAnalytic
 COPY --chown=0:0 users /var/solr/data/users
 
+<% @fields.each do |field| %>
+  COPY --chown=0:0 <%= @table_name %> /var/solr/data/<%= @table_name %>
+<% end %>
+
 RUN chmod -R 0777 /var/solr/data
 
 VOLUME /var/solr
