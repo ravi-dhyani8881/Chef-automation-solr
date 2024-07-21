@@ -91,6 +91,16 @@ template installDirectory + rootDirectory+ projectName+ "/#{key}/core.properties
     )
     action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
 end
+
+template installDirectory + rootDirectory+ projectName+ "/Dockerfile" do
+    source 'solr/Dockerfile.erb' # Assuming you have a template file named controller_template.erb
+    variables(
+    table_name: "#{key}",
+    fields: value['fields'],
+    relations: value['relations']
+    )
+    action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
+end
    
 
 template installDirectory + rootDirectory+ projectName +"/#{key}/solrconfig.xml" do
