@@ -114,10 +114,8 @@ RUN set -ex; \
   rm -r "$GNUPGHOME"
 
 
-<%= @graph %>
-
-<% @fields.each do |field| %>
-  COPY --chown=0:0 <%= @table_name %> /var/solr/data/<%= @table_name %>
+<% @tables.each do |table| %>
+  COPY --chown=0:0 <%= table %> /var/solr/data/<%= table %>
 <% end %>
 
 RUN chmod -R 0777 /var/solr/data
