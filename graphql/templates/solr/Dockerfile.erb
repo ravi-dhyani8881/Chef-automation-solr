@@ -114,6 +114,8 @@ RUN set -ex; \
   rm -r "$GNUPGHOME"
 
 
+<%= @graph %>
+
 <% @fields.each do |field| %>
   COPY --chown=0:0 <%= @table_name %> /var/solr/data/<%= @table_name %>
 <% end %>
