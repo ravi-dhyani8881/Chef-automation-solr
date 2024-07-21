@@ -44,12 +44,15 @@ directory installDirectory + rootDirectory + projectName do
   action :create
 end
 
-template installDirectory + rootDirectory + projectName+ "/Dockerfile" do
-    source 'solr/Dockerfile.erb' # Assuming you have a template file named controller_template.erb
-    variables(
-    graph: "#{graph}"
-    )
-    action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
+# Extract table names from the graph
+tables = graph.map { |table| table.keys.first }
+
+template "/var/chef/output/gitRepo/ProcLoc/Dockerfile" do
+  source "solr/Dockerfile.erb"
+  variables(
+    tables: tables
+  )
+  action :create
 end
 
 
