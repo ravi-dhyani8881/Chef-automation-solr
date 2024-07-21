@@ -8,7 +8,7 @@
 #installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
  installDirectory = "/var/chef/output/"
 
-rootDirectory="gitRepo"
+rootDirectory="gitRepo/"
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
@@ -36,7 +36,7 @@ user 'ravi.dhyani' do
     action :create
   end
 
-directory installDirectory + rootDirectory do
+directory installDirectory + rootDirectory + projectName do
   owner 'ravi.dhyani'
  # group 'group_name'
   mode '0755'
@@ -57,7 +57,7 @@ json_data['tables'].each do |table|
         value['fields'].each do |field|
           puts "  #{field['name']}: #{field['type']}"
   
-directory "#{installDirectory}#{rootDirectory}/#{key}" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -65,7 +65,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}/#{key}/conf" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/conf" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -73,7 +73,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}/conf" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}/#{key}/data" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/data" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -82,7 +82,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}/data" do
 end
 
 
-template installDirectory + rootDirectory+ "/#{key}/core.properties" do
+template installDirectory + rootDirectory+ projectName+ "/#{key}/core.properties" do
     source 'solr/core.properties.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -93,7 +93,7 @@ template installDirectory + rootDirectory+ "/#{key}/core.properties" do
 end
    
 
-template installDirectory + rootDirectory+ "/#{key}/solrconfig.xml" do
+template installDirectory + rootDirectory+ projectName +"/#{key}/solrconfig.xml" do
     source 'solr/solrconfig.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -104,7 +104,7 @@ template installDirectory + rootDirectory+ "/#{key}/solrconfig.xml" do
 end
 
 
-template installDirectory + rootDirectory+ "/#{key}/schema.xml" do
+template installDirectory + rootDirectory+ projectName +"/#{key}/schema.xml" do
     source 'solr/schema.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
