@@ -44,6 +44,15 @@ directory installDirectory + rootDirectory + projectName do
   action :create
 end
 
+remote_directory installDirectory + rootDirectory + projectName  do
+  source scripts
+  owner 'root'    # Set the owner of the directory
+  group 'root'    # Set the group of the directory
+  mode '0755'     # Set the permissions of the directory
+  recursive true  # Copy files and subdirectories recursively
+  action :create  # Ensure the directory is created with the specified settings
+end
+
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
