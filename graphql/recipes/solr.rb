@@ -25,6 +25,8 @@ graph = json_data["tables"]
 
 projectName = json_data["projectName"]
 
+targetDirectory = installDirectory + rootDirectory + projectName + "/scripts"
+
 
 user 'ravi.dhyani' do
     comment 'User for owning the directory'
@@ -44,7 +46,7 @@ directory installDirectory + rootDirectory + projectName do
   action :create
 end
 
-remote_directory installDirectory + rootDirectory + projectName  do
+remote_directory targetDirectory  do
   source 'scripts'
   owner 'root'    # Set the owner of the directory
   group 'root'    # Set the group of the directory
