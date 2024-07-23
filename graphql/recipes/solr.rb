@@ -45,7 +45,7 @@ directory installDirectory + rootDirectory + projectName do
 end
 
 remote_directory installDirectory + rootDirectory + projectName  do
-  source scripts
+  source 'scripts'
   owner 'root'    # Set the owner of the directory
   group 'root'    # Set the group of the directory
   mode '0755'     # Set the permissions of the directory
