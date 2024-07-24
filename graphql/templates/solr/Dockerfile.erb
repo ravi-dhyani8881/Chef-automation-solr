@@ -113,7 +113,7 @@ RUN set -ex; \
   { command -v gpgconf; gpgconf --kill all || :; }; \
   rm -r "$GNUPGHOME"
 
-
+ COPY --chown=0:0 scripts /opt/docker-solr/scripts
 <% @tables.each do |table| %>
   COPY --chown=0:0 <%= table %> /var/solr/data/<%= table %>
 <% end %>
