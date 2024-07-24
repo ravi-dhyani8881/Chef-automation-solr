@@ -38,6 +38,14 @@ user 'ravi.dhyani' do
     action :create
   end
 
+template installDirectory + rootDirectory + projectName + "/Dockerfile" do
+  source "solr/Dockerfile.erb"
+  variables(
+    tables: tables
+  )
+  action :create
+end
+
 directory installDirectory + rootDirectory + projectName do
   owner 'ravi.dhyani'
  # group 'group_name'
