@@ -58,13 +58,6 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-template installDirectory + rootDirectory + projectName "/Dockerfile" do
-  source "solr/Dockerfile.erb"
-  variables(
-    tables: tables
-  )
-  action :create
-end
 
 
 json_data['tables'].each do |table|
