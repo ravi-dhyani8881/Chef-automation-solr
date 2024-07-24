@@ -41,7 +41,7 @@ user 'ravi.dhyani' do
 template installDirectory + rootDirectory + projectName + "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
-    tables: tables
+    tables: "#{tables}" 
   )
   action :create
 end
