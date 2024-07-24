@@ -38,14 +38,6 @@ user 'ravi.dhyani' do
     action :create
   end
 
-template installDirectory + rootDirectory + projectName + "/Dockerfile" do
-  source "solr/Dockerfile.erb"
-  variables(
-    tables: "#{tables}" 
-  )
-  action :create
-end
-
 directory installDirectory + rootDirectory + projectName do
   owner 'ravi.dhyani'
  # group 'group_name'
@@ -66,7 +58,13 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-
+template "/var/chef/output/gitRepo/ProcLoc/Dockerfile" do
+  source "solr/Dockerfile.erb"
+  variables(
+    tables: tables
+  )
+  action :create
+end
 
 json_data['tables'].each do |table|
     # Iterate over keys (Content, Review, like, etc.)
