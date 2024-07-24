@@ -58,7 +58,7 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-template "/var/chef/output/gitRepo/ProcLoc/Dockerfile" do
+template installDirectory + rootDirectory+ projectName +  "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
     tables: tables
