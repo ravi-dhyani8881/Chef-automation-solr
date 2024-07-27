@@ -25,7 +25,7 @@ graph = json_data["tables"]
 
 projectName = json_data["projectName"]
 
-targetDirectory = installDirectory + rootDirectory + "/scripts"
+targetDirectory = installDirectory + rootDirectory + projectName + "/scripts"
 
 
 user 'ravi.dhyani' do
@@ -38,7 +38,7 @@ user 'ravi.dhyani' do
     action :create
   end
 
-directory installDirectory + rootDirectory do
+directory installDirectory + rootDirectory + projectName do
   owner 'ravi.dhyani'
  # group 'group_name'
   mode '0755'
@@ -58,7 +58,7 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-template installDirectory + rootDirectory +  "/Dockerfile" do
+template installDirectory + rootDirectory + projectName + "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
     tables: tables
@@ -76,7 +76,7 @@ json_data['tables'].each do |table|
         value['fields'].each do |field|
           puts "  #{field['name']}: #{field['type']}"
   
-directory "#{installDirectory}#{rootDirectory}/#{key}" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -84,7 +84,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}/#{key}/conf" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/conf" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -92,7 +92,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}/conf" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}/#{key}/data" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/data" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -101,7 +101,7 @@ directory "#{installDirectory}#{rootDirectory}/#{key}/data" do
 end
 
 
-template installDirectory + rootDirectory+ "/#{key}/core.properties" do
+template installDirectory + rootDirectory + projectName +"/#{key}/core.properties" do
     source 'solr/core.properties.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -111,7 +111,7 @@ template installDirectory + rootDirectory+ "/#{key}/core.properties" do
     action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
 end
 
-template installDirectory + rootDirectory+"/#{key}/solrconfig.xml" do
+template installDirectory + rootDirectory+ projectName +"/#{key}/solrconfig.xml" do
     source 'solr/solrconfig.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -122,7 +122,7 @@ template installDirectory + rootDirectory+"/#{key}/solrconfig.xml" do
 end
 
 
-template installDirectory + rootDirectory+"/#{key}/schema.xml" do
+template installDirectory + rootDirectory + projectName +"/#{key}/schema.xml" do
     source 'solr/schema.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
