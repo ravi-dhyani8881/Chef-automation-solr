@@ -119,6 +119,7 @@ RUN set -ex; \
 <% end %>
 
 RUN chmod -R 0777 /var/solr/data
+RUN chmod -R +x /opt/docker-solr/scripts
 
 VOLUME /var/solr
 EXPOSE 8983
