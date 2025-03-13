@@ -1,130 +1,142 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-FROM openjdk:11-jre
 
-LABEL maintainer="The Apache Lucene/Solr Project"
-LABEL repository="https://github.com/docker-solr/docker-solr"
+FROM eclipse-temurin:17-jre-jammy
 
-ARG SOLR_VERSION="8.10.1"
-ARG SOLR_SHA512="1e8593b4a9b196aa3a12edc1928c83fc108f1cae2dd17f17a10b76d2b1a441341db6a165f74bca0f78bfc7fd0d63b30f525221d5725529961212886a50ee6aa7"
-ARG SOLR_KEYS="9722F25F650057E26C803B60A6D064D833B3A969"
-# If specified, this will override SOLR_DOWNLOAD_SERVER and all ASF mirrors. Typically used downstream for custom builds
-ARG SOLR_DOWNLOAD_URL
+ARG SOLR_VERSION="9.8.1"
+# empty for the full distribution, "-slim" for the slim distribution
+ARG SOLR_DIST=""
+ARG SOLR_SHA512="08888ea626b9fa617438b97f9f8d552acfbd087fc9fd248e7495627716decca5e2e8d55bedf0e1f2484c838295c2abd68debb002d1ae36965eb99753320459f4"
+ARG SOLR_KEYS="50E3EE1C91C7E0CB4DFB007B369424FC98F3F6EC"
 
-# Override the solr download location with e.g.:
-#   docker build -t mine --build-arg SOLR_DOWNLOAD_SERVER=http://www-eu.apache.org/dist/lucene/solr .
-ARG SOLR_DOWNLOAD_SERVER
+# Override the default solr download location with a preferred mirror, e.g.:
+#   docker build -t mine --build-arg SOLR_DOWNLOAD_SERVER=https://downloads.apache.org/solr/solr .
+# This server must support downloading at: ${SOLR_DOWNLOAD_SERVER}/${SOLR_VERSION}/solr-${SOLR_VERSION}(-slim).tgz(.asc)
+ARG SOLR_DOWNLOAD_SERVER="https://www.apache.org/dyn/closer.lua?action=download&filename=/solr/solr"
 
 RUN set -ex; \
   apt-get update; \
-  apt-get -y install acl dirmngr gpg lsof procps wget netcat nano gosu tini; \
+  apt-get -y --no-install-recommends install wget gpg gnupg dirmngr; \
   rm -rf /var/lib/apt/lists/*; \
-  cd /usr/local/bin; wget -nv https://github.com/apangin/jattach/releases/download/v1.5/jattach; chmod 755 jattach; \
-  echo >jattach.sha512 "d8eedbb3e192a8596c08efedff99b9acf1075331e1747107c07cdb1718db2abe259ef168109e46bd4cf80d47d43028ff469f95e6ddcbdda4d7ffa73a20e852f9  jattach"; \
-  sha512sum -c jattach.sha512; rm jattach.sha512
+  export SOLR_BINARY="solr-$SOLR_VERSION$SOLR_DIST.tgz"; \
+  MAX_REDIRECTS=3; \
+  case "${SOLR_DOWNLOAD_SERVER}" in \
+    (*"apache.org"*);; \
+    (*) \
+      # If a non-ASF URL is provided, allow more redirects and skip GPG step.
+      MAX_REDIRECTS=4 && \
+      SKIP_GPG_CHECK=true;; \
+  esac; \
+  export DOWNLOAD_URL="$SOLR_DOWNLOAD_SERVER/$SOLR_VERSION/$SOLR_BINARY"; \
+  echo "downloading $DOWNLOAD_URL"; \
+  if ! wget -t 10 --max-redirect $MAX_REDIRECTS --retry-connrefused -nv "$DOWNLOAD_URL" -O "/opt/$SOLR_BINARY"; then rm -f "/opt/$SOLR_BINARY"; fi; \
+  if [ ! -f "/opt/$SOLR_BINARY" ]; then echo "failed download attempt for $SOLR_BINARY"; exit 1; fi; \
+  echo "$SOLR_SHA512 */opt/$SOLR_BINARY" | sha512sum -c -; \
+  if [ -z "$SKIP_GPG_CHECK" ]; then \
+    # Setup GPG \
+    export GNUPGHOME="/tmp/gnupg_home"; \
+    mkdir -p "$GNUPGHOME"; \
+    chmod 700 "$GNUPGHOME"; \
+    echo "disable-ipv6" >> "$GNUPGHOME/dirmngr.conf"; \
+    if [ -n "$SOLR_KEYS" ]; then \
+      # Install all Solr GPG Keys to start
+      wget -nv "https://downloads.apache.org/solr/KEYS" -O- | \
+        gpg --batch --import --key-origin 'url,https://downloads.apache.org/solr/KEYS'; \
+      # Save just the release key
+      release_keys="$(gpg --batch --export -a ${SOLR_KEYS})"; \
+      rm -rf "$GNUPGHOME"/*; \
+      echo "${release_keys}" | gpg --batch --import; \
+    fi; \
+    # Do GPG Checks
+    echo "downloading $DOWNLOAD_URL.asc"; \
+    wget -nv "$DOWNLOAD_URL.asc" -O "/opt/$SOLR_BINARY.asc"; \
+    (>&2 ls -l "/opt/$SOLR_BINARY" "/opt/$SOLR_BINARY.asc"); \
+    gpg --batch --verify "/opt/$SOLR_BINARY.asc" "/opt/$SOLR_BINARY"; \
+    # Cleanup GPG
+    { command -v gpgconf; gpgconf --kill all || :; }; \
+    rm -r "$GNUPGHOME"; \
+  else \
+    echo "Skipping GPG validation due to non-Apache build"; \
+  fi; \
+  tar -C /opt --extract --preserve-permissions --file "/opt/$SOLR_BINARY"; \
+  rm "/opt/$SOLR_BINARY"*; \
+  apt-get -y remove gpg dirmngr && apt-get -y autoremove;
+
+
+
+LABEL org.opencontainers.image.title="Apache Solr"
+LABEL org.opencontainers.image.description="Solr is the blazing-fast, open source, multi-modal search platform built on Apache Lucene. It powers full-text, vector, and geospatial search at many of the world's largest organizations."
+LABEL org.opencontainers.image.authors="The Apache Solr Project"
+LABEL org.opencontainers.image.url="https://solr.apache.org"
+LABEL org.opencontainers.image.source="https://github.com/apache/solr"
+LABEL org.opencontainers.image.documentation="https://solr.apache.org/guide/"
+LABEL org.opencontainers.image.version="${SOLR_VERSION}"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 ENV SOLR_USER="solr" \
     SOLR_UID="8983" \
     SOLR_GROUP="solr" \
     SOLR_GID="8983" \
-    SOLR_CLOSER_URL="http://www.apache.org/dyn/closer.lua?filename=lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz&action=download" \
-    SOLR_DIST_URL="https://www.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz" \
-    SOLR_ARCHIVE_URL="https://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz" \
-    PATH="/opt/solr/bin:/opt/docker-solr/scripts:$PATH" \
+    PATH="/opt/solr/bin:/opt/solr/docker/scripts:/opt/solr/prometheus-exporter/bin:/opt/solr/cross-dc-manager/bin:$PATH" \
     SOLR_INCLUDE=/etc/default/solr.in.sh \
     SOLR_HOME=/var/solr/data \
     SOLR_PID_DIR=/var/solr \
     SOLR_LOGS_DIR=/var/solr/logs \
-    LOG4J_PROPS=/var/solr/log4j2.xml
+    LOG4J_PROPS=/var/solr/log4j2.xml \
+    SOLR_JETTY_HOST="0.0.0.0" \
+    SOLR_ZK_EMBEDDED_HOST="0.0.0.0"
 
 RUN set -ex; \
   groupadd -r --gid "$SOLR_GID" "$SOLR_GROUP"; \
   useradd -r --uid "$SOLR_UID" --gid "$SOLR_GID" "$SOLR_USER"
 
+# add symlink to /opt/solr, remove what we don't want.
+# Remove the Dockerfile because it might not represent the dockerfile that was used to generate the image.
 RUN set -ex; \
-  export GNUPGHOME="/tmp/gnupg_home"; \
-  mkdir -p "$GNUPGHOME"; \
-  chmod 700 "$GNUPGHOME"; \
-  echo "disable-ipv6" >> "$GNUPGHOME/dirmngr.conf"; \
-  for key in $SOLR_KEYS; do \
-    found=''; \
-    for server in \
-      ha.pool.sks-keyservers.net \
-      hkp://keyserver.ubuntu.com:80 \
-      hkp://p80.pool.sks-keyservers.net:80 \
-      pgp.mit.edu \
-    ; do \
-      echo "  trying $server for $key"; \
-      gpg --batch --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$key" && found=yes && break; \
-      gpg --batch --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$key" && found=yes && break; \
-    done; \
-    test -z "$found" && echo >&2 "error: failed to fetch $key from several disparate servers -- network issues?" && exit 1; \
-  done; \
-  exit 0
+  (cd /opt; ln -s solr-*/ solr); \
+  rm -Rf /opt/solr/docs /opt/solr/docker/Dockerfile;
 
 RUN set -ex; \
-  export GNUPGHOME="/tmp/gnupg_home"; \
-  MAX_REDIRECTS=1; \
-  if [ -n "$SOLR_DOWNLOAD_URL" ]; then \
-    # If a custom URL is defined, we download from non-ASF mirror URL and allow more redirects and skip GPG step
-    # This takes effect only if the SOLR_DOWNLOAD_URL build-arg is specified, typically in downstream Dockerfiles
-    MAX_REDIRECTS=4; \
-    SKIP_GPG_CHECK=true; \
-  elif [ -n "$SOLR_DOWNLOAD_SERVER" ]; then \
-    SOLR_DOWNLOAD_URL="$SOLR_DOWNLOAD_SERVER/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"; \
-  fi; \
-  for url in $SOLR_DOWNLOAD_URL $SOLR_CLOSER_URL $SOLR_DIST_URL $SOLR_ARCHIVE_URL; do \
-    if [ -f "/opt/solr-$SOLR_VERSION.tgz" ]; then break; fi; \
-    echo "downloading $url"; \
-    if wget -t 10 --max-redirect $MAX_REDIRECTS --retry-connrefused -nv "$url" -O "/opt/solr-$SOLR_VERSION.tgz"; then break; else rm -f "/opt/solr-$SOLR_VERSION.tgz"; fi; \
-  done; \
-  if [ ! -f "/opt/solr-$SOLR_VERSION.tgz" ]; then echo "failed all download attempts for solr-$SOLR_VERSION.tgz"; exit 1; fi; \
-  if [ -z "$SKIP_GPG_CHECK" ]; then \
-    echo "downloading $SOLR_ARCHIVE_URL.asc"; \
-    wget -nv "$SOLR_ARCHIVE_URL.asc" -O "/opt/solr-$SOLR_VERSION.tgz.asc"; \
-    echo "$SOLR_SHA512 */opt/solr-$SOLR_VERSION.tgz" | sha512sum -c -; \
-    (>&2 ls -l "/opt/solr-$SOLR_VERSION.tgz" "/opt/solr-$SOLR_VERSION.tgz.asc"); \
-    gpg --batch --verify "/opt/solr-$SOLR_VERSION.tgz.asc" "/opt/solr-$SOLR_VERSION.tgz"; \
-  else \
-    echo "Skipping GPG validation due to non-Apache build"; \
-  fi; \
-  tar -C /opt --extract --file "/opt/solr-$SOLR_VERSION.tgz"; \
-  (cd /opt; ln -s "solr-$SOLR_VERSION" solr); \
-  rm "/opt/solr-$SOLR_VERSION.tgz"*; \
-  rm -Rf /opt/solr/docs/ /opt/solr/dist/{solr-core-$SOLR_VERSION.jar,solr-solrj-$SOLR_VERSION.jar,solrj-lib,solr-test-framework-$SOLR_VERSION.jar,test-framework}; \
-  mkdir -p /opt/solr/server/solr/lib /docker-entrypoint-initdb.d /opt/docker-solr; \
-  chown -R 0:0 "/opt/solr-$SOLR_VERSION"; \
-  find "/opt/solr-$SOLR_VERSION" -type d -print0 | xargs -0 chmod 0755; \
-  find "/opt/solr-$SOLR_VERSION" -type f -print0 | xargs -0 chmod 0644; \
-  chmod -R 0755 "/opt/solr-$SOLR_VERSION/bin" "/opt/solr-$SOLR_VERSION/contrib/prometheus-exporter/bin/solr-exporter" /opt/solr-$SOLR_VERSION/server/scripts/cloud-scripts; \
+  mkdir -p /opt/solr/server/solr/lib /docker-entrypoint-initdb.d; \
   cp /opt/solr/bin/solr.in.sh /etc/default/solr.in.sh; \
   mv /opt/solr/bin/solr.in.sh /opt/solr/bin/solr.in.sh.orig; \
   mv /opt/solr/bin/solr.in.cmd /opt/solr/bin/solr.in.cmd.orig; \
-  chown root:0 /etc/default/solr.in.sh; \
   chmod 0664 /etc/default/solr.in.sh; \
-  mkdir -p /var/solr/data /var/solr/logs; \
-  (cd /opt/solr/server/solr; cp solr.xml zoo.cfg /var/solr/data/); \
-  cp /opt/solr/server/resources/log4j2.xml /var/solr/log4j2.xml; \
-  find /var/solr -type d -print0 | xargs -0 chmod 0770; \
-  find /var/solr -type f -print0 | xargs -0 chmod 0660; \
-  sed -i -e "s/\"\$(whoami)\" == \"root\"/\$(id -u) == 0/" /opt/solr/bin/solr; \
-  sed -i -e 's/lsof -PniTCP:/lsof -t -PniTCP:/' /opt/solr/bin/solr; \
-  chown -R "0:0" /opt/solr-$SOLR_VERSION /docker-entrypoint-initdb.d /opt/docker-solr; \
+  mkdir -p -m0770 /var/solr; \
   chown -R "$SOLR_USER:0" /var/solr; \
-  { command -v gpgconf; gpgconf --kill all || :; }; \
-  rm -r "$GNUPGHOME"
+  test ! -e /opt/solr/modules || ln -s /opt/solr/modules /opt/solr/contrib; \
+  test ! -e /opt/solr/prometheus-exporter || ln -s /opt/solr/prometheus-exporter /opt/solr/modules/prometheus-exporter;
 
- COPY --chown=0:0 scripts /opt/docker-solr/scripts
+RUN set -ex; \
+    apt-get update; \
+    apt-get -y --no-install-recommends install acl lsof procps wget netcat gosu tini jattach; \
+    rm -rf /var/lib/apt/lists/*;
+
+COPY --chown=0:0 scripts /opt/docker-solr/scripts
 <% @tables.each do |table| %>
-  COPY --chown=0:0 <%= table %> /var/solr/data/<%= table %>
+COPY --chown=0:0 <%= table %> /var/solr/data/<%= table %>
 <% end %>
-
-RUN chmod -R 0777 /var/solr/data
-RUN chmod -R +x /opt/docker-solr/scripts
-
+    
+    RUN chmod -R 0777 /var/solr/data
+    RUN chmod -R +x /opt/docker-solr/scripts
+    
 VOLUME /var/solr
 EXPOSE 8983
 WORKDIR /opt/solr
-USER $SOLR_USER
+USER $SOLR_UID
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["solr-foreground"]
