@@ -68,12 +68,13 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t my-chef-solo-image .
+        docker build --build-arg BRANCH_NAME=${{ env.PROJECT_NAME }} -t my-chef-solo-image .
 
     - name: Run Docker container
       run: |
         docker run --rm -v ${{ github.workspace }}/file.json:/var/chef/cookbooks/graphql/file.json \
         -e GITHUB_TOKEN=${{ secrets.OTHER_REPO_GITHUB_TOKEN }} \
+        -e BRANCH_NAME=${{ env.PROJECT_NAME }} \  # Pass BRANCH_NAME to the container
         my-chef-solo-image
 
     - name: Tag Docker image
