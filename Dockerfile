@@ -31,7 +31,7 @@ COPY web.json /var/chef/config/web.json
 # Define environment variables for the repository
 ENV REPO_URL=https://github.com/ravi-dhyani8881/solr-docker.git
 ENV REPO_DIR=/var/chef/output/gitRepo
-ENV BRANCH_NAME=royal
+ENV BRANCH_NAME=${BRANCH_NAME}
 
 
 # Clone the repository and checkout the desired branch/commit
