@@ -11,18 +11,28 @@ if [ ! -f /var/chef/config/web.json ]; then
     exit 1
 fi
 
-# Run Chef-Solo
-
-
 # Change to the repository directory
-cd /var/chef/output/gitRepo
+cd /var/chef/output/gitRepo || { echo "Failed to navigate to repository"; exit 1; }
 
 # Configure Git for the current repository
 git config user.email "ravi.dhyani@mulesoft.com"
 git config user.name "ravi-dhyani8881"
 
-git pull origin "$BRANCH_NAME"
+# Fetch latest updates from the remote
+git fetch origin
 
+# Check if the branch exists on the remote
+if git ls-remote --exit-code --heads origin "$BRANCH_NAME"; then
+    echo "Branch $BRANCH_NAME exists. Checking out..."
+    git checkout "$BRANCH_NAME"
+    git pull origin "$BRANCH_NAME"
+else
+    echo "Branch $BRANCH_NAME does not exist. Creating it..."
+    git checkout -b "$BRANCH_NAME"
+    git push -u origin "$BRANCH_NAME"
+fi
+
+# Run Chef-Solo
 chef-solo -c /var/chef/config/solo.rb -j /var/chef/config/web.json
 
 # Check for changes
@@ -32,13 +42,10 @@ if [ -n "$git_status" ]; then
     echo "Changes detected, proceeding with git add, commit, and push."
 
     # Stage changes
-    git fetch origin
-    git rebase origin/"$BRANCH_NAME"
-    #git pull origin "$BRANCH_NAME"
     git add .
 
     # Commit changes
-    git commit -m "Automated commit by Docker container" .
+    git commit -m "Automated commit by Docker container"
 
     # Push changes using the GitHub token for authentication
     if [ -n "$GITHUB_TOKEN" ]; then
