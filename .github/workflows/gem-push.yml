@@ -42,7 +42,7 @@ jobs:
 
     - name: Extract projectName and write to file.json
       run: |
-        projectName=$(jq -r 'event.client_payload.data' file.json)
+        projectName=$(jq -r '.client_payload.data' file.json)
         echo "Extracted projectName: $projectName"
         echo "$projectName" > file.json
         echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
