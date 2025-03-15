@@ -23,7 +23,8 @@ json_data = JSON.parse(json_string)
 # Access the value associated with the "cities" key
 graph = json_data["tables"]
 
-projectName = json_data["projectName"]
+# projectName = json_data["projectName"]
+projectName = json_data["subOrganizationID"]
 
 targetDirectory = installDirectory + rootDirectory + projectName + "/scripts"
 
