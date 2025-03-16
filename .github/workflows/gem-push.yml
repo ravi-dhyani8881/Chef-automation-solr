@@ -46,7 +46,7 @@ jobs:
         projectData=$(jq -r '.client_payload.data' file.json)
         echo "Extracted projectName: $projectName"
         echo "$projectData" > file.json
-        echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
+        echo "PROJECT_NAME=$organizationID" >> $GITHUB_ENV
 
     - name: Verify content of file.json
       run: |
