@@ -29,7 +29,7 @@ enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
 
 
-targetDirectory = installDirectory + rootDirectory + projectName + "/scripts"
+targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
 
 
 user 'ravi.dhyani' do
@@ -42,7 +42,7 @@ user 'ravi.dhyani' do
     action :create
   end
 
-directory installDirectory + rootDirectory + projectName do
+directory installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID do
   owner 'ravi.dhyani'
  # group 'group_name'
   mode '0755'
@@ -62,7 +62,7 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-template installDirectory + rootDirectory + projectName + "/Dockerfile" do
+template installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
     tables: tables
@@ -80,7 +80,7 @@ json_data['tables'].each do |table|
         value['fields'].each do |field|
           puts "  #{field['name']}: #{field['type']}"
   
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -88,7 +88,7 @@ directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/conf" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}/conf" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -96,7 +96,7 @@ directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/conf" do
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{key}/data" do
+directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}/data" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
