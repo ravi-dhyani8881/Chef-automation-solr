@@ -29,8 +29,9 @@ enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
 
 
-targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
+# targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
 
+targetDirectory = "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/scripts"
 
 user 'ravi.dhyani' do
     comment 'User for owning the directory'
@@ -42,9 +43,18 @@ user 'ravi.dhyani' do
     action :create
   end
 
+=begin
 directory installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID do
   owner 'ravi.dhyani'
  # group 'group_name'
+  mode '0755'
+  recursive true
+  action :create
+end
+=end
+
+directory "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}" do
+  owner 'ravi.dhyani'
   mode '0755'
   recursive true
   action :create
