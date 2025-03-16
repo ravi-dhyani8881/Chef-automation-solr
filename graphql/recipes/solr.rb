@@ -25,6 +25,9 @@ graph = json_data["tables"]
 
 # projectName = json_data["projectName"]
 projectName = json_data["subOrganizationID"]
+enviromentID = json_data["enviromentID"]
+graphID = json_data["graphID"]
+
 
 targetDirectory = installDirectory + rootDirectory + projectName + "/scripts"
 
