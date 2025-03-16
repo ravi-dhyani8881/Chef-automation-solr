@@ -115,7 +115,7 @@ directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{g
 end
 
 
-template installDirectory + rootDirectory + projectName +"/#{key}/core.properties" do
+template installDirectory + rootDirectory + projectName +"/#{enviromentID}"+"/#{graphID}"+"/#{key}/core.properties" do
     source 'solr/core.properties.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -125,7 +125,7 @@ template installDirectory + rootDirectory + projectName +"/#{key}/core.propertie
     action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
 end
 
-template installDirectory + rootDirectory+ projectName +"/#{key}/solrconfig.xml" do
+template installDirectory + rootDirectory+ projectName +"/#{enviromentID}"+"/#{graphID}"+"/#{key}/solrconfig.xml" do
     source 'solr/solrconfig.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
@@ -136,7 +136,7 @@ template installDirectory + rootDirectory+ projectName +"/#{key}/solrconfig.xml"
 end
 
 
-template installDirectory + rootDirectory + projectName +"/#{key}/schema.xml" do
+template installDirectory + rootDirectory + projectName +"/#{enviromentID}"+"/#{graphID}"+"/#{key}/schema.xml" do
     source 'solr/schema.xml.erb' # Assuming you have a template file named controller_template.erb
     variables(
     table_name: "#{key}",
