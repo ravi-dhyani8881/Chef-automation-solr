@@ -84,11 +84,11 @@ end
 template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
   source "kubernates/solr-deployment.yaml.erb"
   variables(
-    project_name: projectName,
-    sub_organization_id: subOrganizationID,
-    enviroment_id: enviromentID,
-    graph_id: graphID,
-    version: version
+    project_name: json_data["projectName"],
+    sub_organization_id: json_data["subOrganizationID"],
+    enviroment_id: json_data["enviromentID"],
+    graph_id: json_data["graphID"],
+    version: json_data["version"]
   )
   action :create
 end
