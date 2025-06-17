@@ -29,6 +29,12 @@ enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
 version = json_data["version"]
 
+Chef::Log.info("installDirectory: #{installDirectory.inspect}")
+Chef::Log.info("rootDirectory: #{rootDirectory.inspect}")
+Chef::Log.info("projectName: #{projectName.inspect}")
+Chef::Log.info("enviromentID: #{enviromentID.inspect}")
+Chef::Log.info("graphID: #{graphID.inspect}")
+
 
 # targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
 
