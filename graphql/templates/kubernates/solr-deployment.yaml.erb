@@ -1,3 +1,11 @@
+# Debug output
+# project: <%= project_name %>
+# suborg: <%= sub_organization_id %>
+# env: <%= enviroment_id %>
+# graph: <%= graph_id %>
+# version: <%= version %>
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,6 +24,6 @@ spec:
     spec:
       containers:
         - name: solr
-          image: ravi8881/
+          image: <%= "ravi8881/#{project_name}-#{sub_organization_id}-#{enviroment_id}-#{graph_id}:#{version}" %>
           ports:
             - containerPort: 8983
