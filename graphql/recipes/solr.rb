@@ -6,9 +6,9 @@
 
 
 #installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
-installDirectory = "/var/chef/output"
+installDirectory = "/var/chef/output/"
 
-rootDirectory="/gitRepo"
+rootDirectory="gitRepo"
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
