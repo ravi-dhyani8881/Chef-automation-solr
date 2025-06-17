@@ -88,6 +88,22 @@ template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{
   action :create
 end
 
+template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-ingress.yaml" do
+  source "kubernates/solr-ingress.yaml.erb"
+  variables(
+    tables: tables
+  )
+  action :create
+end
+
+template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-service.yaml" do
+  source "kubernates/solr-service.yaml.erb"
+  variables(
+    tables: tables
+  )
+  action :create
+end
+
 json_data['tables'].each do |table|
     # Iterate over keys (Content, Review, like, etc.)
     table.each do |key, value|
