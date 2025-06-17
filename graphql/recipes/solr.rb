@@ -53,7 +53,7 @@ directory installDirectory + rootDirectory + projectName + "/" + enviromentID + 
 end
 =end
 
-directory "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}" do
+directory "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates" do
   owner 'ravi.dhyani'
   mode '0755'
   recursive true
@@ -74,6 +74,14 @@ tables = graph.map { |table| table.keys.first }
 
 template installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/Dockerfile" do
   source "solr/Dockerfile.erb"
+  variables(
+    tables: tables
+  )
+  action :create
+end
+
+template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
+  source "kubernates/solr-deployment.yaml.erb"
   variables(
     tables: tables
   )
