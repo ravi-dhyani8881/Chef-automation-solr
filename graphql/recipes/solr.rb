@@ -6,9 +6,9 @@
 
 
 #installDirectory = "/Users/ravi.dhyani/Desktop/mine/git/chef/"
-installDirectory = "/var/chef/output/"
+installDirectory = "/var/chef/output"
 
-rootDirectory="gitRepo/"
+rootDirectory="gitRepo"
 
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file_names.json'))
 #file_names = JSON.parse(File.read('/Users/ravi.dhyani/Desktop/mine/git/chef/file.json'))
@@ -29,11 +29,11 @@ enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
 version = json_data["version"]
 
-Chef::Log.info("installDirectory: #{installDirectory.inspect}")
-Chef::Log.info("rootDirectory: #{rootDirectory.inspect}")
-Chef::Log.info("projectName: #{projectName.inspect}")
-Chef::Log.info("enviromentID: #{enviromentID.inspect}")
-Chef::Log.info("graphID: #{graphID.inspect}")
+Chef::Log.debug("installDirectory: #{installDirectory.inspect}")
+Chef::Log.debug("rootDirectory: #{rootDirectory.inspect}")
+Chef::Log.debug("projectName: #{projectName.inspect}")
+Chef::Log.debug("enviromentID: #{enviromentID.inspect}")
+Chef::Log.debug("graphID: #{graphID.inspect}")
 
 
 # targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
