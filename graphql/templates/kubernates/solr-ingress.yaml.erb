@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: solr-ingress
+  annotations:
+    ngrok.com/ingress-mode: edge
+  labels:
+    app: solr
+spec:
+  ingressClassName: ngrok
+  rules:
+    - host: glorious-killdeer-allowed.ngrok-free.app
+      http:
+        paths:
+          - path: /solr/
+            pathType: Prefix
+            backend:
+              service:
+                name: solr-service
+                port:
+                  number: 80
