@@ -79,7 +79,7 @@ end
 # Extract table names from the graph
 tables = graph.map { |table| table.keys.first }
 
-template installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/Dockerfile" do
+template installDirectory + rootDirectory + "/" + projectName + "/" + enviromentID + "/" + graphID + "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
     tables: tables
