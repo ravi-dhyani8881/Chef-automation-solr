@@ -89,7 +89,7 @@ template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{
     enviroment_id: enviromentID,
     graph_id: graphID,
     version: version
-      )
+  )
   action :create
 end
 
