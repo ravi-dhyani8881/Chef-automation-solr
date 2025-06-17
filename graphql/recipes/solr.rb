@@ -125,7 +125,7 @@ json_data['tables'].each do |table|
         value['fields'].each do |field|
           puts "  #{field['name']}: #{field['type']}"
   
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}" do
+directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/#{key}" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -133,7 +133,7 @@ directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{g
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}/conf" do
+directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/#{key}/conf" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
@@ -141,7 +141,7 @@ directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{g
     action :create
 end
 
-directory "#{installDirectory}#{rootDirectory}#{projectName}/#{enviromentID}/#{graphID}/#{key}/data" do
+directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/#{key}/data" do
     owner 'ravi.dhyani'
    # group 'group_name'
     mode '0755'
