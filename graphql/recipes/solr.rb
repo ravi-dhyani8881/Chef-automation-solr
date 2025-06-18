@@ -24,6 +24,7 @@ json_data = JSON.parse(json_string)
 graph = json_data["tables"]
 
 projectName = json_data["subOrganizationID"]
+organizationID = json_data["organizationID"]
 subOrganizationID = json_data["subOrganizationID"]
 enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
@@ -91,6 +92,7 @@ template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{
   source "kubernates/solr-deployment.yaml.erb"
   variables(
     project_name: json_data["subOrganizationID"],
+    organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
     graph_id: json_data["graphID"],
