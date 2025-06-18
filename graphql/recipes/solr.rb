@@ -23,7 +23,7 @@ json_data = JSON.parse(json_string)
 # Access the value associated with the "cities" key
 graph = json_data["tables"]
 
-projectName = json_data["projectName"]
+projectName = json_data["subOrganizationID"]
 subOrganizationID = json_data["subOrganizationID"]
 enviromentID = json_data["enviromentID"]
 graphID = json_data["graphID"]
@@ -90,7 +90,7 @@ end
 template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
   source "kubernates/solr-deployment.yaml.erb"
   variables(
-    project_name: json_data["projectName"],
+    project_name: json_data["subOrganizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
     graph_id: json_data["graphID"],
