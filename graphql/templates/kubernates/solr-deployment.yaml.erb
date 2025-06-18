@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: solr
-          image: ravi8881/<%= @project_name %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
+          image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
           ports:
             - containerPort: 8983
