@@ -61,7 +61,7 @@ directory installDirectory + rootDirectory + projectName + "/" + enviromentID + 
 end
 =end
 
-directory "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates" do
+directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates" do
   owner 'ravi.dhyani'
   mode '0755'
   recursive true
