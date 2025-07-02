@@ -39,7 +39,7 @@ Chef::Log.debug("graphID: #{graphID.inspect}")
 
 # targetDirectory = installDirectory + rootDirectory + projectName + "/" + enviromentID + "/" + graphID + "/scripts"
 
-targetDirectory = "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/scripts"
+targetDirectory = "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/scripts"
 
 user 'ravi.dhyani' do
     comment 'User for owning the directory'
@@ -88,7 +88,7 @@ template installDirectory + rootDirectory + "/" + projectName + "/" + enviroment
   action :create
 end
 
-template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
+template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
   source "kubernates/solr-deployment.yaml.erb"
   variables(
     project_name: json_data["subOrganizationID"],
@@ -101,7 +101,7 @@ template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{
   action :create
 end
 
-template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-ingress.yaml" do
+template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-ingress.yaml" do
   source "kubernates/solr-ingress.yaml.erb"
   variables(
     tables: tables
@@ -109,7 +109,7 @@ template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{
   action :create
 end
 
-template "#{installDirectory}/#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-service.yaml" do
+template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-service.yaml" do
   source "kubernates/solr-service.yaml.erb"
   variables(
     tables: tables
