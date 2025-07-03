@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: solr-deployment
-  namespace: febe
+  name: solr-deployment-<%= @graph_id %>
+  namespace: <%= @organizationID %>
   labels:
-    app: solr
+    app: solr-<%= @graph_id %>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: solr
+      app: solr-<%= @graph_id %>
   template:
     metadata:
       labels:
-        app: solr
+        app: solr-<%= @graph_id %>
     spec:
       containers:
-        - name: solr
+        - name: solr-<%= @graph_id %>
           image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
           ports:
             - containerPort: 8983
