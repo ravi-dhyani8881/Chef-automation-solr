@@ -68,7 +68,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build --build-arg BRANCH_NAME=${{ env.PROJECT_NAME }} -t my-chef-solo-image .
+        docker build --build-arg BRANCH_NAME=${{ env.PROJECT_NAME }} -t my-solr-solo-image .
 
     - name: Run Docker container
       run: |
@@ -76,15 +76,15 @@ jobs:
           -v ${{ github.workspace }}/file.json:/var/chef/cookbooks/graphql/file.json \
           -e GITHUB_TOKEN=${{ secrets.OTHER_REPO_GITHUB_TOKEN }} \
           -e BRANCH_NAME=${{ env.PROJECT_NAME }} \
-          my-chef-solo-image
+          my-solr-solo-image
 
     - name: Tag Docker image
       run: |
-        docker tag my-chef-solo-image:latest ${{ secrets.DOCKER_USERNAME }}/my-chef-solo-image:latest
+        docker tag my-solr-solo-image:latest ${{ secrets.DOCKER_USERNAME }}/my-solr-solo-image:latest
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/my-chef-solo-image:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/my-solr-solo-image:latest
 
     - name: Trigger compile Solr code to run
       env:
