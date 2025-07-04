@@ -91,7 +91,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
   source "kubernates/solr-deployment.yaml.erb"
   variables(
-    project_name: json_data["subOrganizationID"],
+    project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
@@ -104,7 +104,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-ingress.yaml" do
   source "kubernates/solr-ingress.yaml.erb"
   variables(
-    project_name: json_data["subOrganizationID"],
+    project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
@@ -117,7 +117,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-service.yaml" do
   source "kubernates/solr-service.yaml.erb"
   variables(
-    project_name: json_data["subOrganizationID"],
+    project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
