@@ -49,12 +49,29 @@
 
   <field name="ID" type="string" indexed="true" stored="true" multiValued="false" required="true"/>
  
+<!--
+
   <% @fields.each do |field| %>
     <% unless field['name'] == 'ID' || field['name'] == 'Id' %>
       <field name="<%= field['name'] %>" type="<%= field['type'] %>" indexed="true" stored="true"/>
     <% end %>
   <% end %>
-  
+  -->
+
+  <% @fields.each do |field| %>
+  <% unless field['name'] == 'ID' || field['name'] == 'Id' %>
+    <% mapped_type = case field['type'].to_s.downcase
+                    when 'string', 'varchar', 'datetime' then 'string'
+                    when 'date' then 'date'
+                    when 'int', 'integer' then 'int'
+                    else 'string' # fallback
+                  end %>
+    <field name="<%= field['name'] %>" type="<%= mapped_type %>" indexed="true" stored="true"/>
+  <% end %>
+<% end %>
+
+
+
 
   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
        will be used if the name matches any of the patterns.
