@@ -21,7 +21,26 @@
  It is *not* a good example to work from. 
 -->
 <config>
-  <updateHandler class="solr.DirectUpdateHandler2" />
+  <updateHandler class="solr.DirectUpdateHandler2">
+    <updateLog>
+      <str name="dir">${solr.data.dir:}</str>
+    </updateLog>
+
+    <autoCommit>
+      <maxTime>15000</maxTime>  <openSearcher>false</openSearcher> </autoCommit>
+
+    <autoSoftCommit>
+      <maxTime>1000</maxTime> </autoSoftCommit>
+  </updateHandler>
+
+<updateRequestProcessorChain name="add-timestamps" default="true">
+    <processor class="solr.TimestampUpdateProcessorFactory">
+      <str name="fieldName">updatedAt</str>
+    </processor>
+
+    <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
+
 
   <requestDispatcher handleSelect="true" >
     <requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048" />

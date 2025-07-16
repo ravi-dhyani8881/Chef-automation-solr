@@ -40,8 +40,8 @@
       <filter class="solr.PorterStemFilterFactory"/>
     </analyzer>
   </fieldType>
-  
-  <fieldType name="date" class="solr.TrieDateField" sortMissingLast="true" omitNorms="true"/>
+  <fieldType name="pdate" class="solr.DatePointField" docValues="true" sortMissingLast="true" />  
+
 
   <fieldType name="nametext" class="solr.TextField">
     <analyzer class="org.apache.lucene.analysis.core.WhitespaceAnalyzer"/>
@@ -62,7 +62,7 @@
   <% unless field['name'] == 'ID' || field['name'] == 'Id' %>
     <% mapped_type = case field['type'].to_s.downcase
                     when 'string', 'varchar', 'datetime' then 'string'
-                    when 'date' then 'date'
+                    when 'date' then 'pdate'
                     when 'int', 'integer' then 'int'
                     else 'string' # fallback
                   end %>
@@ -70,7 +70,10 @@
   <% end %>
 <% end %>
 
-
+<fieldType name="long" class="solr.LongPointField" docValues="true"/>
+  <field name="_version_" type="long" indexed="true" stored="true"/>
+<field name="createdAt" type="pdate" indexed="true" stored="true" default="NOW"/>
+  <field name="updatedAt" type="pdate" indexed="true" stored="true"  />
 
 
   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
