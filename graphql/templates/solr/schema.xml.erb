@@ -48,19 +48,35 @@
   </fieldType>
 
   <field name="ID" type="string" indexed="true" stored="true" multiValued="false" required="true"/>
- 
-<!--
 
-  <% @fields.each do |field| %>
-  <% unless field['name'] == 'ID' || field['name'] == 'Id' %>
-    <% mapped_type = case field['type'].to_s.downcase
-                    when 'string', 'varchar', 'datetime' then 'string'
-                    when 'date' then 'pdate'
-                    when 'int', 'integer' then 'int'
-                    else 'string' # fallback
-                  end %>
-    <field name="<%= field['name'] %>" type="<%= mapped_type %>" indexed="true" stored="true"/>
+ <% @fields.each do |field| %>
+  <% # Convert the field name to lowercase for case-insensitive comparison %>
+  <% field_name_lower = field['name'].to_s.downcase %>
+
+  <% if field_name_lower == 'id' %>
+    <% # Skip 'ID' or 'Id' entirely %>
+    <% next %>
+  <% elsif field_name_lower == 'createdat' %>
+    <% # Special handling for createdAt %>
+    <field name="createdAt" type="pdate" indexed="true" stored="true" default="NOW"/>
+    <% next %>
+  <% elsif field_name_lower == 'updatedat' %>
+    <% # Special handling for updatedAt %>
+    <field name="updatedAt" type="pdate" indexed="true" stored="true"/>
+    <% next %>
   <% end %>
+  <% # For all other fields, apply the general mapping logic %>
+  <% mapped_type = case field['type'].to_s.downcase
+                   when 'string', 'varchar' then 'string'
+                   when 'datetime', 'date' then 'pdate' # Map both to pdate
+                   when 'int', 'integer' then 'pint'
+                   when 'long', 'bigint' then 'plong'
+                   when 'float' then 'pfloat'
+                   when 'double' then 'pdouble'
+                   when 'boolean', 'bool' then 'boolean'
+                   else 'string' # fallback
+                   end %>
+  <field name="<%= field['name'] %>" type="<%= mapped_type %>" indexed="true" stored="true"/>
 <% end %>
 
 <fieldType name="long" class="solr.LongPointField" docValues="true"/>
