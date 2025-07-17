@@ -42,7 +42,12 @@
   </fieldType>
   <fieldType name="pdate" class="solr.DatePointField" docValues="true" sortMissingLast="true" />  
 
-  <fieldType name="long" class="solr.LongPointField" docValues="true"/>
+
+  <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+
+  <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+  <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+  <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
   
  <fieldType name="nametext" class="solr.TextField">
     <analyzer class="org.apache.lucene.analysis.core.WhitespaceAnalyzer"/>
@@ -81,7 +86,7 @@
 <% end %>
 
 
-  <field name="_version_" type="long" indexed="true" stored="true"/>
+  <field name="_version_" type="plong" indexed="true" stored="true"/>
 
 
 
