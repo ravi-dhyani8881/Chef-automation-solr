@@ -42,8 +42,9 @@
   </fieldType>
   <fieldType name="pdate" class="solr.DatePointField" docValues="true" sortMissingLast="true" />  
 
-
-  <fieldType name="nametext" class="solr.TextField">
+  <fieldType name="long" class="solr.LongPointField" docValues="true"/>
+  
+ <fieldType name="nametext" class="solr.TextField">
     <analyzer class="org.apache.lucene.analysis.core.WhitespaceAnalyzer"/>
   </fieldType>
 
@@ -79,10 +80,9 @@
   <field name="<%= field['name'] %>" type="<%= mapped_type %>" indexed="true" stored="true"/>
 <% end %>
 
-<fieldType name="long" class="solr.LongPointField" docValues="true"/>
+
   <field name="_version_" type="long" indexed="true" stored="true"/>
-<field name="createdAt" type="pdate" indexed="true" stored="true" default="NOW"/>
-  <field name="updatedAt" type="pdate" indexed="true" stored="true"  />
+
 
 
   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
