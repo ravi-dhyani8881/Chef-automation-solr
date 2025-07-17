@@ -58,14 +58,18 @@
   <% end %>
   -->
 
-  <% @fields.each do |field| %>
-  <% unless field['name'] == 'ID' || field['name'] == 'Id' %>
+  <% # Skip 'ID', 'Id', 'updatedAt', 'createdAt' (and their lowercase/variant forms) %>
+  <% unless ['id', 'updatedat', 'createdat'].include?(field_name_lower) %>
     <% mapped_type = case field['type'].to_s.downcase
-                    when 'string', 'varchar', 'datetime' then 'string'
-                    when 'date' then 'pdate'
-                    when 'int', 'integer' then 'int'
-                    else 'string' # fallback
-                  end %>
+                     when 'string', 'varchar' then 'string'
+                     when 'datetime', 'date' then 'pdate' # Combined datetime and date to pdate
+                     when 'int', 'integer' then 'pint' # Using pint for consistency with modern types
+                     when 'long', 'bigint' then 'plong' # Added long/bigint to plong
+                     when 'float' then 'pfloat' # Added float
+                     when 'double' then 'pdouble' # Added double
+                     when 'boolean', 'bool' then 'boolean' # Added boolean
+                     else 'string' # fallback
+                     end %>
     <field name="<%= field['name'] %>" type="<%= mapped_type %>" indexed="true" stored="true"/>
   <% end %>
 <% end %>
@@ -90,8 +94,6 @@
   <!-- Fields for language identification -->
   <dynamicField name="userId_*" type="string" indexed="true" stored="false"/>
   <dynamicField name="apiKey_*" type="string" indexed="true" stored="false"/>
-  <dynamicField name="lastUpdate_*" type="date" indexed="true" stored="false"/>
-  <dynamicField name="addedDate_*" type="date" indexed="true" stored="false"/>
   <dynamicField name="status_*" type="string" indexed="true" stored="false"/>
 
   <uniqueKey>ID</uniqueKey>
