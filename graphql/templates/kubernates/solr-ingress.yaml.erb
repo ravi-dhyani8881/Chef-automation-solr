@@ -8,7 +8,7 @@ metadata:
   labels:
     app: solr-<%= @graph_id %>
 spec:
-  ingressClassName: ngrok
+  ingressClassName: nginx
   rules:
     - host: picked-apt-wombat.ngrok-free.app
       http:
