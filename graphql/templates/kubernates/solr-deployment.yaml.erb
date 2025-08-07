@@ -20,3 +20,10 @@ spec:
           image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
           ports:
             - containerPort: 8983
+          volumeMounts:
+            - name: solr-data-volume
+              mountPath: /opt/solr/server/solr # This path is where Solr looks for its cores
+      volumes:
+        - name: solr-data-volume
+          persistentVolumeClaim:
+            claimName: <%= @graph_id %> # This name must match the PVC metadata.name

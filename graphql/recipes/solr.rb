@@ -127,6 +127,32 @@ template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{g
   action :create
 end
 
+template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/pv.yaml" do
+  source "kubernates/pv.yaml.erb"
+  variables(
+    project_name: json_data["projectName"],
+    organizationID: json_data["organizationID"],
+    sub_organization_id: json_data["subOrganizationID"],
+    enviroment_id: json_data["enviromentID"],
+    graph_id: json_data["graphID"],
+    version: json_data["version"]
+  )
+  action :create
+end
+
+template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/pvc.yaml" do
+  source "kubernates/pvc.yaml.erb"
+  variables(
+    project_name: json_data["projectName"],
+    organizationID: json_data["organizationID"],
+    sub_organization_id: json_data["subOrganizationID"],
+    enviroment_id: json_data["enviromentID"],
+    graph_id: json_data["graphID"],
+    version: json_data["version"]
+  )
+  action :create
+end
+
 json_data['tables'].each do |table|
     # Iterate over keys (Content, Review, like, etc.)
     table.each do |key, value|
