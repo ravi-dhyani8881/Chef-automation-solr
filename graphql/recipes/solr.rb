@@ -193,6 +193,7 @@ template installDirectory + rootDirectory  + "/"+  projectName +"/#{enviromentID
     variables(
     table_name: "#{key}",
     fields: value['fields'],
+    graph_id: json_data["graphID"],
     relations: value['relations']
     )
     action :create # Use :create_if_missing if you only want to create the file if it doesn't exist
