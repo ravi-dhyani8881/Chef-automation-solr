@@ -22,7 +22,7 @@ spec:
             - containerPort: 8983
           volumeMounts:
             - name: solr-data-volume
-              mountPath: /opt/solr/server/solr # This path is where Solr looks for its cores
+              mountPath: /data # This path is where Solr looks for its cores
       volumes:
         - name: solr-data-volume
           persistentVolumeClaim:
