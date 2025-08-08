@@ -15,6 +15,16 @@ spec:
       labels:
         app: solr-<%= @graph_id %>
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.36.1
+          command: ["sh", "-c", "chown -R 8983:8983 /data"]
+          volumeMounts:
+            - name: solr-data-volume
+              mountPath: /data
+          securityContext:
+            runAsUser: 0 # Run as root to change ownership
+
       containers:
         - name: solr-<%= @graph_id %>
           image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
