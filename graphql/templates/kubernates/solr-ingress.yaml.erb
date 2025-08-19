@@ -4,13 +4,13 @@ metadata:
   name: solr-ingress-<%= @graph_id %>
   namespace: <%= @organizationID %>
   annotations:
-    ngrok.com/ingress-mode: edge
+    nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
     app: solr-<%= @graph_id %>
 spec:
   ingressClassName: nginx
   rules:
-    - host: picked-apt-wombat.ngrok-free.app
+    - host: <%= @ID %>
       http:
         paths:
           - path: /solr/
