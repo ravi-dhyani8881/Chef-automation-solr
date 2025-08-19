@@ -3,14 +3,12 @@ kind: Ingress
 metadata:
   name: solr-ingress-<%= @graph_id %>
   namespace: <%= @organizationID %>
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
     app: solr-<%= @graph_id %>
 spec:
   ingressClassName: nginx
   rules:
-    - host: <%= @ID %>
+    - host: <%= @ID %>.local
       http:
         paths:
           - path: /solr/
