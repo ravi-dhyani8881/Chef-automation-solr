@@ -104,6 +104,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-ingress.yaml" do
   source "kubernates/solr-ingress.yaml.erb"
   variables(
+    ID: json_data["ID"],
     project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
