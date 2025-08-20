@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: <%= @ID %>.local
+    - host: <%= @ID %>.k8s
       http:
         paths:
           - path: /solr/
