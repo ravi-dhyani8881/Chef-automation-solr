@@ -91,6 +91,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-deployment.yaml" do
   source "kubernates/solr-deployment.yaml.erb"
   variables(
+    ID: json_data["ID"],
     project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
@@ -118,6 +119,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/solr-service.yaml" do
   source "kubernates/solr-service.yaml.erb"
   variables(
+    ID: json_data["ID"],
     project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
@@ -131,6 +133,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/pv.yaml" do
   source "kubernates/pv.yaml.erb"
   variables(
+    ID: json_data["ID"],
     project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
@@ -144,6 +147,7 @@ end
 template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/kubernates/pvc.yaml" do
   source "kubernates/pvc.yaml.erb"
   variables(
+    ID: json_data["ID"],
     project_name: json_data["projectName"],
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],

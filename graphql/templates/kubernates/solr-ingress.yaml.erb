@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: solr-ingress-<%= @graph_id %>
+  name: solr-ingress-<%= @ID %>
   namespace: <%= @organizationID %>
   labels:
-    app: solr-<%= @graph_id %>
+    app: solr-<%= @ID %>
 spec:
   ingressClassName: nginx
   rules:
@@ -15,6 +15,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: solr-service-<%= @graph_id %>
+                name: solr-service-<%= @ID %>
                 port:
                   number: 80

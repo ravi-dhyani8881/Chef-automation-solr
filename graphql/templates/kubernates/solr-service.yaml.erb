@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: solr-service-<%= @graph_id %>
+  name: solr-service-<%= @ID %>
   namespace: <%= @organizationID %>
   labels:
-    app: solr-<%= @graph_id %>
+    app: solr-<%= @ID %>
 spec:
   selector:
-    app: solr-<%= @graph_id %>
+    app: solr-<%= @ID %>
   ports:
     - port: 80
       targetPort: 8983
