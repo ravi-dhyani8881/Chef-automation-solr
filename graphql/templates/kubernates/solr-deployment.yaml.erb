@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: solr-deployment-<%= @graph_id %>
+  name: solr-deployment-<%= @ID %>
   namespace: <%= @organizationID %>
   labels:
-    app: solr-<%= @graph_id %>
+    app: solr-<%= @ID %>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: solr-<%= @graph_id %>
+      app: solr-<%= @ID %>
   template:
     metadata:
       labels:
-        app: solr-<%= @graph_id %>
+        app: solr-<%= @ID %>
     spec:
       initContainers:
         - name: fix-permissions
@@ -33,7 +33,7 @@ spec:
             runAsUser: 0 # Run as root to change ownership
 
       containers:
-        - name: solr-<%= @graph_id %>
+        - name: solr-<%= @ID %>
           image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
           ports:
             - containerPort: 8983
