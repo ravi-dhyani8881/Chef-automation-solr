@@ -3,7 +3,7 @@ FROM solr:9.8.1
 
 USER root
 # Set your custom Solr home
-ENV SOLR_HOME=/data
+ENV SOLR_HOME=/data/<%= @graph_id %>/<%= @ID %>
 
 COPY --chown=solr:solr scripts /opt/docker-solr/scripts
 <% @tables.each do |table| %>

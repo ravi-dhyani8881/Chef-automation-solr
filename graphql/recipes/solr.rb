@@ -83,6 +83,8 @@ tables = graph.map { |table| table.keys.first }
 template installDirectory + rootDirectory + "/" + projectName + "/" + enviromentID + "/" + graphID + "/Dockerfile" do
   source "solr/Dockerfile.erb"
   variables(
+    ID: json_data["ID"],
+    graph_id: json_data["graphID"],
     tables: tables
   )
   action :create
@@ -153,6 +155,7 @@ template "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{g
     organizationID: json_data["organizationID"],
     sub_organization_id: json_data["subOrganizationID"],
     enviroment_id: json_data["enviromentID"],
+    ID: json_data["ID"],
     graph_id: json_data["graphID"],
     version: json_data["version"]
   )
@@ -199,6 +202,7 @@ template installDirectory + rootDirectory  + "/"+  projectName +"/#{enviromentID
     variables(
     table_name: "#{key}",
     fields: value['fields'],
+    ID: json_data["ID"],
     graph_id: json_data["graphID"],
     relations: value['relations']
     )
