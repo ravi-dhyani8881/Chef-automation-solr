@@ -13,7 +13,7 @@ RUN mkdir -p /var/solr/move/<%= table %>
     
     RUN chmod -R 0777 /var/solr/data && \
     chmod -R 0777 /var/solr/move && \
-    RUN chmod -R +x /opt/docker-solr/scripts
+    chmod -R +x /opt/docker-solr/scripts
     
 VOLUME /var/solr
 EXPOSE 8983
