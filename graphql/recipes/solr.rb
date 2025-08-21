@@ -180,6 +180,14 @@ directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{
     action :create
 end
 
+directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/move/#{key}" do
+    owner 'ravi.dhyani'
+   # group 'group_name'
+    mode '0755'
+    recursive true
+    action :create
+end
+
 directory "#{installDirectory}#{rootDirectory}/#{projectName}/#{enviromentID}/#{graphID}/#{key}/conf" do
     owner 'ravi.dhyani'
    # group 'group_name'

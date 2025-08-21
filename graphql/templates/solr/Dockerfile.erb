@@ -8,9 +8,11 @@ ENV SOLR_HOME=/data/<%= @graph_id %>/<%= @ID %>
 COPY --chown=solr:solr scripts /opt/docker-solr/scripts
 <% @tables.each do |table| %>
 COPY --chown=solr:solr <%= table %> /var/solr/data/<%= table %>
+RUN mkdir -p /var/solr/move/<%= table %>
 <% end %>
     
-    RUN chmod -R 0777 /var/solr/data
+    RUN chmod -R 0777 /var/solr/data && \
+    chmod -R 0777 /var/solr/move && \
     RUN chmod -R +x /opt/docker-solr/scripts
     
 VOLUME /var/solr
