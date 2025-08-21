@@ -24,7 +24,7 @@ spec:
             - |
               echo "Copying initial Solr data from image to PVC..."
               mkdir -p /data/<%= @graph_id %>/<%= @ID %> /data/<%= @graph_id %>/data
-              cp -R /var/solr/data/* /data/<%= @graph_id %> || true
+              cp -R /var/solr/data/* /data/<%= @graph_id %>/<%= @ID %> || true
               chown -R 8983:8983 /data
               echo "Done copying Solr cores."
           volumeMounts:
