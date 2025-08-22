@@ -27,7 +27,7 @@ spec:
               cp -R /var/solr/data/* /data/<%= @graph_id %>/<%= @ID %> || true
               cp -R /var/solr/move/* /data/<%= @graph_id %>/data || true
               chown -R 8983:8983 /data
-              chmod -R 775 /data
+              chmod -R 777 /data
               echo "Done copying Solr cores."
           volumeMounts:
             - name: solr-data-volume
