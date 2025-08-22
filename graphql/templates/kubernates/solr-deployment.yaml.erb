@@ -40,6 +40,9 @@ spec:
           image: ravi8881/<%= @organizationID %>-<%= @sub_organization_id %>-<%= @enviroment_id %>-<%= @graph_id %>:<%= @version %>
           ports:
             - containerPort: 8983
+          env:
+            - name: SOLR_OPTS
+              value: "-Dsolr.allowPaths=/data"  
           volumeMounts:
             - name: solr-data-volume
               mountPath: /data # This path is where Solr looks for its cores
